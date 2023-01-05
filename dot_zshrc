@@ -1,0 +1,218 @@
+# zmodload zsh/zprof
+# zprof
+# p10k
+if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
+  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
+fi
+
+# check p10k theme
+[[ -d ~/.oh-my-zsh/custom/themes/powerlevel10k ]] || git clone https://github.com/romkatv/powerlevel10k.git $ZSH_CUSTOM/themes/powerlevel10k
+
+# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
+# [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh || [[ ! -f ~/.config/utils/p10k.zsh ]] || source ~/.config/utils/p10k.zsh
+
+
+export ZSH=$HOME"/.oh-my-zsh"
+# export PATH=/usr/local/bin:$PATH
+# modify TERM for autosuggestion plugin
+export TERM=xterm-256color
+# for man page color
+export MANPAGER="less -R --use-color -Dd+r -Du+b"
+
+ZSH_THEME="powerlevel10k/powerlevel10k"
+
+# Plugins
+plugins=(
+        # git
+        zsh-autosuggestions
+        autojump
+        fast-syntax-highlighting
+        # zsh-syntax-highlighting
+        # hitokoto
+        extract
+        # z
+        # vi-mode
+        zsh-vi-mode
+        git-open
+        sudo
+        command-not-found
+        safe-paste
+        # colored-man-pages
+        fzf-tab
+	 )
+
+# source this file after plugins
+source $ZSH/oh-my-zsh.sh
+
+# alias ohmyzsh="mate ~/.oh-my-zsh"
+function wrm () {
+    mv $1 .Trash
+    }
+
+function wp () {
+    python3 ~/repo/pclip/pclips.py $1 $2
+    }
+
+function wgit () {
+        # wget "https://gh.api.99988866.xyz/"$1
+        git clone ${1/https:\/\/github.com/https://hub.fastgit.xyz}
+}
+
+function calc () {
+  python3 -c "print($*)"
+}
+
+function wman () {
+  tldr $* | less
+}
+
+function wrg () {
+  rg -i $1 .
+}
+
+function wse () {
+  grep -nri $1 .
+}
+
+function wps () {
+    ps -aux | grep -v grep | grep $1
+}
+
+function wpip () {
+  python3 /home/warren/repo/utils/wpip.py $1
+}
+
+function wdu () {
+  du -sh $* | sort -hr | head -n 15
+}
+
+function getip () {
+  python3 /home/warren/scripts/getip.py $1
+}
+
+function apexranked () {
+  python3 /home/warren/scripts/apexranked.py $1
+}
+
+# alias nvf='nvim $(fzf)'
+alias nvf='nvim $(rg --files --hidden --no-ignore-vcs -g "" | fzf)'
+function cdf () {
+  ans=$(du -a ~/ | awk '{print $2}' | fzf)
+  cd $ans
+}
+alias nvi='nvim'
+alias pms='python manage.py shell -i ipython'
+alias prs='python manage.py runserver'
+alias tt='time zsh -i -c exit'
+
+# xprop for WM_INFO, xec for EVENT TEST
+function wxprop () {
+  xprop | awk '
+	/^WM_CLASS/{sub(/.* =/, "instance:"); sub(/,/, "\nclass:"); print}
+	/^WM_NAME/{sub(/.* =/, "title:"); print}'
+}
+
+setopt nonomatch
+
+alias wserver="python ~/scripts/FileServer.py"
+alias gls="git log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative"
+# alias vim="nvim"
+alias vi="nvim -u None -N"
+alias ra="ranger"
+alias c="clear"
+alias s="neofetch"
+alias lg="lazygit"
+alias e="extract"
+alias fra="pcmanfm"
+alias killdwm="killall xinit"
+export EDITOR="nvim"
+export GO111MODULE="auto"
+export GOPROXY="https://goproxy.cn,direct"
+# add fzf
+# source $HOME/.fzf.zsh
+zvm_after_init_commands+=('[ -f ~/.config/utils/fzf.zsh ] && source ~/.config/utils/fzf.zsh')
+
+# alias for proxy
+alias proxy_on='export all_proxy=socks5://127.0.0.1:23333'
+alias polipo_on='export all_proxy=http://127.0.0.1:8123'
+alias proxy_off='unset all_proxy'
+
+# alias for amixer: control audio
+alias vu='amixer set Master 5%+'
+alias vd='amixer set Master 5%-'
+alias vt='amixer set Master toggle'
+
+# fzf
+# export FZF_DEFAULT_OPTS='--bind=ctrl-t:top,change:top --bind ctrl-e:down,ctrl-u:up'
+# use ccat for preview: https://github.com/owenthereal/ccat/releases/download/v1.1.0/linux-amd64-1.1.0.tar.gz 
+export FZF_DEFAULT_OPTS='--preview "[[ $(file --mime {}) =~ binary ]] && echo {} is a binary file || (ccat --color=always {} || highlight -O ansi -l {} || cat {}) 2> /dev/null | head -500"'
+# export FZF_DEFAULT_COMMAND='fd'
+# ag -> use "the_silver_searcher"
+export FZF_DEFAULT_COMMAND='ag --hidden --ignore .git -g ""'
+# export FZF_DEFAULT_COMMAND='rg --files --hidden --no-ignore-vcs -g ""'
+# export FZF_DEFAULT_COMMAND='fd --hidden ""'
+export FZF_COMPLETION_TRIGGER='\'
+export FZF_TMUX=1
+export FZF_TMUX_HEIGHT='80%'
+export fzf_preview_cmd='[[ $(file --mime {}) =~ binary ]] && echo {} is a binary file || (ccat --color=always {} || highlight -O ansi -l {} || cat {}) 2> /dev/null | head -500'
+
+# source completion and key-bindings
+source ~/.config/utils/completion.zsh
+source ~/.config/utils/key-bindings.zsh
+
+# vi-mode cursor shape settings
+# ZVM_INIT_MODE=sourcing
+# # bindkey -v
+# bindkey -M vicmd 'V' edit-command-line
+# export KEYTIMEOUT=1
+#
+# # Change cursor with support for inside/outside tmux
+# function _set_cursor() {
+#     if [[ $TMUX = '' ]]; then
+#       echo -ne $1
+#     else
+#       echo -ne "\ePtmux;\e\e$1\e\\"
+#     fi
+# }
+#
+# function _set_block_cursor() { _set_cursor '\e[2 q' }
+# function _set_beam_cursor() { _set_cursor '\e[6 q' }
+#
+# function zle-keymap-select {
+#   if [[ ${KEYMAP} == vicmd ]] || [[ $1 = 'block' ]]; then
+#       _set_block_cursor
+#   else
+#       _set_beam_cursor
+#   fi
+# }
+# zle -N zle-keymap-select
+# # ensure beam cursor when starting new terminal
+# precmd_functions+=(_set_beam_cursor) #
+# # ensure insert mode and beam cursor when exiting vim
+# zle-line-init() { zle -K viins; _set_beam_cursor }
+
+fk () {
+    TF_PYTHONIOENCODING=$PYTHONIOENCODING;
+    export TF_SHELL=zsh;
+    export TF_ALIAS=fuck;
+    TF_SHELL_ALIASES=$(alias);
+    export TF_SHELL_ALIASES;
+    TF_HISTORY="$(fc -ln -10)";
+    export TF_HISTORY;
+    export PYTHONIOENCODING=utf-8;
+    TF_CMD=$(
+        thefuck THEFUCK_ARGUMENT_PLACEHOLDER $@
+    ) && eval $TF_CMD;
+    unset TF_HISTORY;
+    export PYTHONIOENCODING=$TF_PYTHONIOENCODING;
+    test -n "$TF_CMD" && print -s $TF_CMD
+}
+
+# eval $(thefuck --alias)
+
+PATH="/home/warren/perl5/bin${PATH:+:${PATH}}"; export PATH;
+PERL5LIB="/home/warren/perl5/lib/perl5${PERL5LIB:+:${PERL5LIB}}"; export PERL5LIB;
+PERL_LOCAL_LIB_ROOT="/home/warren/perl5${PERL_LOCAL_LIB_ROOT:+:${PERL_LOCAL_LIB_ROOT}}"; export PERL_LOCAL_LIB_ROOT;
+PERL_MB_OPT="--install_base \"/home/warren/perl5\""; export PERL_MB_OPT;
+PERL_MM_OPT="INSTALL_BASE=/home/warren/perl5"; export PERL_MM_OPT;
