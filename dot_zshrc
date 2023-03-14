@@ -105,6 +105,7 @@ alias nvi='nvim'
 alias pms='python manage.py shell -i ipython'
 alias prs='python manage.py runserver'
 alias tt='time zsh -i -c exit'
+alias speedmirror='sudo reflector --verbose -c China --latest 12 --sort rate --threads 100 --save ~/tmp/mirrorlist'
 
 # xprop for WM_INFO, xec for EVENT TEST
 function wxprop () {
@@ -146,7 +147,7 @@ alias vt='amixer set Master toggle'
 # fzf
 # export FZF_DEFAULT_OPTS='--bind=ctrl-t:top,change:top --bind ctrl-e:down,ctrl-u:up'
 # use ccat for preview: https://github.com/owenthereal/ccat/releases/download/v1.1.0/linux-amd64-1.1.0.tar.gz 
-export FZF_DEFAULT_OPTS='--preview "[[ $(file --mime {}) =~ binary ]] && echo {} is a binary file || (ccat --color=always {} || highlight -O ansi -l {} || cat {}) 2> /dev/null | head -500"'
+export FZF_DEFAULT_OPTS='--preview "[[ $(file --mime {}) =~ binary ]] && echo {} is a binary file || (ccat --color=always {} || highlight -O ansi -l {} || cat {}) 2> /dev/null | head -500" --bind ctrl-j:preview-down,ctrl-k:preview-up'
 # export FZF_DEFAULT_COMMAND='fd'
 # ag -> use "the_silver_searcher"
 export FZF_DEFAULT_COMMAND='ag --hidden --ignore .git -g ""'
