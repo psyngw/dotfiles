@@ -21,12 +21,13 @@ export TERM=xterm-256color
 export MANPAGER="less -R --use-color -Dd+r -Du+b"
 
 ZSH_THEME="powerlevel10k/powerlevel10k"
+# eval "$(starship init zsh)"
 
 # Plugins
 plugins=(
         # git
         zsh-autosuggestions
-        autojump
+        # autojump
         fast-syntax-highlighting
         # zsh-syntax-highlighting
         # hitokoto
@@ -36,11 +37,13 @@ plugins=(
         zsh-vi-mode
         git-open
         sudo
-        command-not-found
+        # command-not-found
         safe-paste
         # colored-man-pages
         fzf-tab
 	 )
+
+source /usr/share/zsh/plugins/zsh-you-should-use/you-should-use.plugin.zsh
 
 # source this file after plugins
 source $ZSH/oh-my-zsh.sh
@@ -56,7 +59,8 @@ function wp () {
 
 function wgit () {
         # wget "https://gh.api.99988866.xyz/"$1
-        git clone ${1/https:\/\/github.com/https://hub.fastgit.xyz}
+        # git clone ${1/https:\/\/github.com/https://hub.fastgit.xyz}
+        git clone "https://ghproxy.com/"$1
 }
 
 function calc () {
@@ -64,7 +68,7 @@ function calc () {
 }
 
 function wman () {
-  tldr $* | less
+  proxychains4 -q tldr $* | bat
 }
 
 function wrg () {
@@ -88,11 +92,20 @@ function wdu () {
 }
 
 function getip () {
-  python3 /home/warren/scripts/getip.py $1
+  python3 $HOME/scripts/getip.py $1
 }
 
 function apexranked () {
   python3 /home/warren/scripts/apexranked.py $1
+}
+
+function mkdirc () {
+  mkdir $1
+  cd $1
+}
+
+function cheat() {
+  curl cheat.sh/$1
 }
 
 # alias nvf='nvim $(fzf)'
@@ -105,7 +118,7 @@ alias nvi='nvim'
 alias pms='python manage.py shell -i ipython'
 alias prs='python manage.py runserver'
 alias tt='time zsh -i -c exit'
-alias speedmirror='sudo reflector --verbose -c China --latest 12 --sort rate --threads 100 --save ~/tmp/mirrorlist'
+alias speedmirror='sudo reflector --verbose -c China --latest 12 --sort rate --threads 100 --save ~/tmp/mirrorlist && echo "saved ~/tmp/mirrorlist"'
 
 # xprop for WM_INFO, xec for EVENT TEST
 function wxprop () {
@@ -121,23 +134,41 @@ alias gls="git log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset 
 # alias vim="nvim"
 alias vi="nvim -u None -N"
 alias ra="ranger"
+alias jo="~/.config/joshuto/jo.sh"
+alias ctoday="mkdir $(date '+%Y%m%d') && cd $(date '+%Y%m%d')"
+alias cz="chezmoi"
 alias c="clear"
 alias s="neofetch"
 alias lg="lazygit"
 alias e="extract"
 alias fra="pcmanfm"
 alias killdwm="killall xinit"
+alias nless="/usr/share/nvim/runtime/macros/less.sh"
+alias j='z'
+alias jc='z -c'      # 严格匹配当前路径的子路径
+# alias jz='z -i'      # 使用交互式选择模式
+# alias jf='z -I'      # 使用 fzf 对多个结果进行选择
+alias jb='z -b'      # 快速回到父目录
 export EDITOR="nvim"
 export GO111MODULE="auto"
 export GOPROXY="https://goproxy.cn,direct"
+if [ "$(command -v exa)" ]; then
+    unalias -m 'll'
+    unalias -m 'l'
+    unalias -m 'la'
+    unalias -m 'ls'
+    alias ls='exa -G  --color auto --icons -s type'
+    alias ll='exa -l --color always --icons -s type'
+fi
 # add fzf
 # source $HOME/.fzf.zsh
 zvm_after_init_commands+=('[ -f ~/.config/utils/fzf.zsh ] && source ~/.config/utils/fzf.zsh')
 
 # alias for proxy
-alias proxy_on='export all_proxy=socks5://127.0.0.1:23333'
-alias polipo_on='export all_proxy=http://127.0.0.1:8123'
-alias proxy_off='unset all_proxy'
+alias proxyon='export all_proxy=socks5://127.0.0.1:23333'
+alias polipoon='export all_proxy=http://127.0.0.1:8123'
+alias proxyoff='unset all_proxy'
+alias proxytest='proxyon && curl ip.fm && proxyoff'
 
 # alias for amixer: control audio
 alias vu='amixer set Master 5%+'
@@ -150,9 +181,9 @@ alias vt='amixer set Master toggle'
 export FZF_DEFAULT_OPTS='--preview "[[ $(file --mime {}) =~ binary ]] && echo {} is a binary file || (ccat --color=always {} || highlight -O ansi -l {} || cat {}) 2> /dev/null | head -500" --bind ctrl-j:preview-down,ctrl-k:preview-up'
 # export FZF_DEFAULT_COMMAND='fd'
 # ag -> use "the_silver_searcher"
-export FZF_DEFAULT_COMMAND='ag --hidden --ignore .git -g ""'
+# export FZF_DEFAULT_COMMAND='ag --hidden --ignore .git -g "*"'
 # export FZF_DEFAULT_COMMAND='rg --files --hidden --no-ignore-vcs -g ""'
-# export FZF_DEFAULT_COMMAND='fd --hidden ""'
+export FZF_DEFAULT_COMMAND='fd --hidden ""'
 export FZF_COMPLETION_TRIGGER='\'
 export FZF_TMUX=1
 export FZF_TMUX_HEIGHT='80%'
@@ -193,27 +224,39 @@ source ~/.config/utils/key-bindings.zsh
 # # ensure insert mode and beam cursor when exiting vim
 # zle-line-init() { zle -K viins; _set_beam_cursor }
 
-fk () {
-    TF_PYTHONIOENCODING=$PYTHONIOENCODING;
-    export TF_SHELL=zsh;
-    export TF_ALIAS=fuck;
-    TF_SHELL_ALIASES=$(alias);
-    export TF_SHELL_ALIASES;
-    TF_HISTORY="$(fc -ln -10)";
-    export TF_HISTORY;
-    export PYTHONIOENCODING=utf-8;
-    TF_CMD=$(
-        thefuck THEFUCK_ARGUMENT_PLACEHOLDER $@
-    ) && eval $TF_CMD;
-    unset TF_HISTORY;
-    export PYTHONIOENCODING=$TF_PYTHONIOENCODING;
-    test -n "$TF_CMD" && print -s $TF_CMD
-}
+# fk () {
+#     TF_PYTHONIOENCODING=$PYTHONIOENCODING;
+#     export TF_SHELL=zsh;
+#     export TF_ALIAS=fuck;
+#     TF_SHELL_ALIASES=$(alias);
+#     export TF_SHELL_ALIASES;
+#     TF_HISTORY="$(fc -ln -10)";
+#     export TF_HISTORY;
+#     export PYTHONIOENCODING=utf-8;
+#     TF_CMD=$(
+#         thefuck THEFUCK_ARGUMENT_PLACEHOLDER $@
+#     ) && eval $TF_CMD;
+#     unset TF_HISTORY;
+#     export PYTHONIOENCODING=$TF_PYTHONIOENCODING;
+#     test -n "$TF_CMD" && print -s $TF_CMD
+# }
 
-# eval $(thefuck --alias)
+# eval $(thefuck --alias fk)
 
 PATH="/home/warren/perl5/bin${PATH:+:${PATH}}"; export PATH;
 PERL5LIB="/home/warren/perl5/lib/perl5${PERL5LIB:+:${PERL5LIB}}"; export PERL5LIB;
 PERL_LOCAL_LIB_ROOT="/home/warren/perl5${PERL_LOCAL_LIB_ROOT:+:${PERL_LOCAL_LIB_ROOT}}"; export PERL_LOCAL_LIB_ROOT;
 PERL_MB_OPT="--install_base \"/home/warren/perl5\""; export PERL_MB_OPT;
 PERL_MM_OPT="INSTALL_BASE=/home/warren/perl5"; export PERL_MM_OPT;
+
+# [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+eval "$(lua /home/warren/Local/z.lua/z.lua  --init zsh once enhanced)"
+
+_fzf_compgen_path() {
+  fd --hidden --follow --exclude ".git" . "$1"
+}
+
+# Use fd to generate the list for directory completion
+_fzf_compgen_dir() {
+  fd --type d --hidden --follow --exclude ".git" . "$1"
+}

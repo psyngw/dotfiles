@@ -1,4 +1,6 @@
 # Colors (Dracula)
+# shell:
+#   program: "/bin/fish"
 colors:
   # Default colors
   primary:
