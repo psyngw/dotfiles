@@ -108,6 +108,11 @@ function cheat() {
   curl cheat.sh/$1
 }
 
+function huashi() {
+  # echo (($1 - 32) / 1.8)
+  python3 -c "print(f'{($1 - 32) / 1.8:.2f}°C')"
+}
+
 # alias nvf='nvim $(fzf)'
 alias nvf='nvim $(rg --files --hidden --no-ignore-vcs -g "" | fzf)'
 function cdf () {
@@ -119,6 +124,7 @@ alias pms='python manage.py shell -i ipython'
 alias prs='python manage.py runserver'
 alias tt='time zsh -i -c exit'
 alias speedmirror='sudo reflector --verbose -c China --latest 12 --sort rate --threads 100 --save ~/tmp/mirrorlist && echo "saved ~/tmp/mirrorlist"'
+alias mpvv='sh ~/Local/daily/play-with-mpv.sh'
 
 # xprop for WM_INFO, xec for EVENT TEST
 function wxprop () {
@@ -135,7 +141,7 @@ alias gls="git log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset 
 alias vi="nvim -u None -N"
 alias ra="ranger"
 alias jo="~/.config/joshuto/jo.sh"
-alias ctoday="mkdir $(date '+%Y%m%d') && cd $(date '+%Y%m%d')"
+alias ctoday="(mkdir $(date '+%Y%m%d') || cd $(date '+%Y%m%d')) && cd $(date '+%Y%m%d')"
 alias cz="chezmoi"
 alias c="clear"
 alias s="neofetch"
@@ -149,6 +155,9 @@ alias jc='z -c'      # 严格匹配当前路径的子路径
 # alias jz='z -i'      # 使用交互式选择模式
 # alias jf='z -I'      # 使用 fzf 对多个结果进行选择
 alias jb='z -b'      # 快速回到父目录
+alias mpv='mpv --hwdec=auto-safe'
+alias gputop='sudo intel_gpu_top'
+alias repolybar='killall polybar && setsid polybar main'
 export EDITOR="nvim"
 export GO111MODULE="auto"
 export GOPROXY="https://goproxy.cn,direct"
