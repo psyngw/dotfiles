@@ -1,0 +1,29 @@
+patch:
+  "recognizer/patterns/veng": "^;.*$"
+  # "engine/segmentors/@before last": affix_segmentor@veng
+  engine/segmentors:
+    - ascii_segmentor
+    - matcher
+    - abc_segmentor
+    - "affix_segmentor@veng"
+    - punct_segmentor
+    - fallback_segmentor
+  veng:
+    tag: veng
+    prefix: ";"
+    tips: "英语输入aabb"
+  # patch eazy_en
+  # __include: easy_en:/patch
+
+  # 无码时空格清空 跟 veng 冲突了 跟各种 Escape 键也冲突了
+  # key_binder/bindings:
+  #   - {when: has_menu, accept: space, send: space}
+  #   - {when: composing, accept: space, send: Escape}
+  # punctuator/half_shape:
+    # "!": {commit: "end"}
+    # "\|": {commit: "\|"}
+    # "!": {commit: "……"}
+  # 这个要设置就得全部设置，不然默认的就会全部失效
+  # punctuator:
+  #   full_shape:
+  #     "!": {commit: "?"}
