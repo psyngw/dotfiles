@@ -65,3 +65,6 @@
 功体比	gtb
 海淘	hdtc
 碳水	tjuv
+下饭	xxfj
+主食	vuui
+掉帧	dnvf
