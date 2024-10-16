@@ -110,3 +110,12 @@ iPad	ipa
 食物	uiwu
 备餐	bwcj
 及时	jiui
+坚果	jmgo
+契约	qiyt
+童话	tshx
+股市	guui
+码率	malv
+新番	xbfj
+番剧	fjju
+助力	vuli
+鸡肉	jirz
