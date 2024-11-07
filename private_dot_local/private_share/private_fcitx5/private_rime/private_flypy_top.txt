@@ -67,4 +67,5 @@
 碳水	tjuv
 下饭	xxfj
 主食	vuui
+首发	uzfa
 掉帧	dnvf
