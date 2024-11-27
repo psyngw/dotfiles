@@ -32,16 +32,16 @@ colors:
 # 设置字体
 font:
   normal:
-    family: "monospace"
+    family: "SarasaTermSCNerd"
     style: Regular
   bold:
-    family: "monospace"
+    family: "SarasaTermSCNerd"
     style: Bold
   italic:
-    family: "monospace"
+    family: "SarasaTermSCNerd"
     style: Italic
   bold_italic:
-    family: "monospace"
+    family: "SarasaTermSCNerd"
     style: Bold Italic
 
   # 字大小
