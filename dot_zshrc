@@ -151,13 +151,14 @@ alias fra="pcmanfm"
 alias killdwm="killall xinit"
 alias nless="/usr/share/nvim/runtime/macros/less.sh"
 alias j='z'
-alias jc='z -c'      # 严格匹配当前路径的子路径
+alias jf='z -c'      # 严格匹配当前路径的子路径
 # alias jz='z -i'      # 使用交互式选择模式
 # alias jf='z -I'      # 使用 fzf 对多个结果进行选择
 alias jb='z -b'      # 快速回到父目录
 alias mpv='mpv --hwdec=auto-safe'
 alias gputop='sudo intel_gpu_top'
 alias repolybar='killall polybar && setsid polybar main'
+alias duf='duf --only local'
 export EDITOR="nvim"
 export GO111MODULE="auto"
 export GOPROXY="https://goproxy.cn,direct"
@@ -252,7 +253,7 @@ source ~/.config/utils/key-bindings.zsh
 
 # eval $(thefuck --alias fk)
 
-PATH="/home/warren/perl5/bin${PATH:+:${PATH}}"; export PATH;
+PATH="/home/warren/perl5/bin${PATH:+:${PATH}}:$HOME/.local/bin"; export PATH;
 PERL5LIB="/home/warren/perl5/lib/perl5${PERL5LIB:+:${PERL5LIB}}"; export PERL5LIB;
 PERL_LOCAL_LIB_ROOT="/home/warren/perl5${PERL_LOCAL_LIB_ROOT:+:${PERL_LOCAL_LIB_ROOT}}"; export PERL_LOCAL_LIB_ROOT;
 PERL_MB_OPT="--install_base \"/home/warren/perl5\""; export PERL_MB_OPT;

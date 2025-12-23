@@ -24,20 +24,10 @@
 
 #用户词库，下一行后开始添加。切换方案或部署后生效
 # no comment c-v to add tab
-
-
-
-
-
-
-
-
 线程	xi
 干什么	gume
 前端	qmdr
 后端	hzdr
-
--i http://mirrors.aliyun.com/pypi/simple/ --trusted-host mirrors.aliyun.com	pyjx	100
 木有	muyz
 事	ui
 时间	uij
